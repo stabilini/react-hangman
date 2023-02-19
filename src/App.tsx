@@ -59,8 +59,8 @@ function App() {
         color: 'white',
         zIndex: 10 }}
       >
-        { isWinner && (<div style={{ background: 'green', border: '5px solid black', }}>Winner!</div>) }
-        { isLoser && (<div style={{ background: 'red', border: '5px solid black', }}>Loser!</div>) }
+        { isWinner && (<div style={{ background: 'green', border: '5px solid black', }}>Ganaste!</div>) }
+        { isLoser && (<div style={{ background: 'red', border: '5px solid black', }}>Perdiste!</div>) }
       </div>
       <HangmanDrawing numberOfGuesses={incorrectLetters.length} />
       <HangmanWord reveal={isLoser} guessedLetters={guessedLetters} wordToGuess={wordToGuess} />
