@@ -90,7 +90,6 @@ export function HangmanDrawing({ numberOfGuesses }: HangmanDrawingProps) {
       <div style={{ height: '10px', width: '200px', background: 'black', marginLeft: '120px' }}></div>
       <div style={{ height: '400px', width: '10px', background: 'black', marginLeft: '120px' }}></div>
       <div style={{ height: '10px', width: '250px', background: 'black' }}></div>
-      <div style={{ position: 'absolute', left: '8px' }}>Hangman español - Nicolás Stabilini</div>
     </div>
   )
 }
