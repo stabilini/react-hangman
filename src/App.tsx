@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from "react"
+import { EndGame } from "./components/EndGame"
 import { HangmanDrawing } from "./components/HangmanDrawing"
 import { HangmanWord } from "./components/HangmanWord"
 import { Keyboard } from "./components/Keyboard"
+import { SetWord } from "./components/SetWord"
 import words from './wordList.json'
 
 function getWord() {
@@ -9,6 +11,7 @@ function getWord() {
 }
 
 function App() {
+  const [customWord, setCustomWord] = useState(false)
   const [wordToGuess, setWordToGuess] = useState(getWord())
   const [guessedLetters, setGuessedLetters] = useState<string[]>([])
   const incorrectLetters = guessedLetters.filter(letter => !wordToGuess.includes(letter))
@@ -20,18 +23,20 @@ function App() {
   }, [guessedLetters, isWinner, isLoser])
   
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      const key = e.key
-      if (!key.match(/^[a-z]$/)) return
-      e.preventDefault()
-      addGuessedLetter(key)
+    if (!customWord) {
+      const handler = (e: KeyboardEvent) => {
+        const key = e.key
+        if (!key.match(/^[a-z]$/)) return
+        e.preventDefault()
+        addGuessedLetter(key)
+      }
+      document.addEventListener('keypress', handler)
+  
+      return () => {
+        document.removeEventListener('keypress', handler)
+      }
     }
-    document.addEventListener('keypress', handler)
-
-    return () => {
-      document.removeEventListener('keypress', handler)
-    }
-  }, [guessedLetters])
+  }, [guessedLetters, customWord])
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -49,19 +54,9 @@ function App() {
   })
 
   return (
-    <div style={{ maxWidth: '800px', display: 'flex', flexDirection: 'column', gap: '2rem', margin: '0 auto', alignItems: 'center'}}>
-      <div style={{
-        fontSize: '7rem',
-        margin: '30px',
-        width: '500px',
-        textAlign: 'center',
-        position: 'absolute',
-        color: 'white',
-        zIndex: 10 }}
-      >
-        { isWinner && (<div style={{ background: 'green', border: '5px solid black', }}>Ganaste!</div>) }
-        { isLoser && (<div style={{ background: 'red', border: '5px solid black', }}>Perdiste!</div>) }
-      </div>
+    <div style={{ maxWidth: '800px', display: 'flex', flexDirection: 'column', gap: '1rem', margin: '0 auto', alignItems: 'center'}}>
+      <EndGame isWinner={isWinner} isLoser={isLoser} />
+      <SetWord guessedLetters={guessedLetters} setCustomWord={setCustomWord} customWord={customWord} setWordToGuess={setWordToGuess} />
       <HangmanDrawing numberOfGuesses={incorrectLetters.length} />
       <HangmanWord reveal={isLoser} guessedLetters={guessedLetters} wordToGuess={wordToGuess} />
       <div style={{ alignSelf: 'stretch' }}>
